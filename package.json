@@ -1,0 +1,16 @@
+{
+  "name": "sticker-overlay",
+  "productName": "Electron Overlay",
+  "version": "0.1.0",
+  "description": "A living sticker overlay for streamers — a floating companion widget with handcrafted animations, transitions, and sound.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "author": "you",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
