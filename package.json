@@ -1,0 +1,15 @@
+{
+  "name": "memix-overlay",
+  "productName": "Memix Overlay",
+  "version": "0.1.0",
+  "description": "Memix Overlay is a lightweight desktop app for adding memes, stickers, GIFs, and images directly over your screen. It makes it easy to quickly display, position, and manage visual overlays while working, streaming, or creating content.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "built-with-aman",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Memix Overlay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Fraunces:ital,wght@0,600;1,600&family=Quicksand:wght@500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div id="app-root">
+
+  <!-- ================= WIDGET ================= -->
+  <div id="widget-view">
+    <div id="widget-card">
+      <div id="drag-layer"></div>
+      <div id="sticker-stage"></div>
+      <div id="shatter-layer"></div>
+      <div id="caption-bubble"></div>
+
+      <div id="resize-slider-wrap">
+        <input type="range" id="resize-slider" min="140" max="420" value="220">
+        <button id="resize-close" title="Close">×</button>
+      </div>
+
+      <div id="controls">
+        <button class="ctrl-btn" id="btn-resize" title="Resize">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v16M6 8l6-4 6 4M6 16l6 4 6-4"/></svg>
+        </button>
+        <button class="ctrl-btn" id="btn-minimize" title="Minimize">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>
+        </button>
+        <button class="ctrl-btn" id="btn-maximize" title="Open dashboard">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>
+        </button>
+        <button class="ctrl-btn" id="btn-close" title="Close">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <div id="dashboard-view">
+    <div id="dash-sidebar">
+      <div id="dash-brand">Memix</div>
+      <button class="dash-nav-item active" data-panel="home"><span class="nav-ic">⌂</span>Home</button>
+      <button class="dash-nav-item" data-panel="library"><span class="nav-ic">▦</span>Sticker Library</button>
+      <button class="dash-nav-item" data-panel="videos"><span class="nav-ic">▶</span>Videos</button>
+      <button class="dash-nav-item" data-panel="categories"><span class="nav-ic">◇</span>Categories</button>
+      <button class="dash-nav-item" data-panel="favorites"><span class="nav-ic">★</span>Favorites</button>
+      <button class="dash-nav-item" data-panel="wishlist"><span class="nav-ic">✎</span>Wishlist</button>
+      <button class="dash-nav-item" data-panel="playlists"><span class="nav-ic">☰</span>Playlists</button>
+      <button class="dash-nav-item" data-panel="settings"><span class="nav-ic">⚙</span>Settings</button>
+      <button class="dash-nav-item" data-panel="animations"><span class="nav-ic">✺</span>Animations</button>
+      <button class="dash-nav-item" data-panel="sounds"><span class="nav-ic">♪</span>Sound Effects</button>
+      <button class="dash-nav-item" data-panel="ai"><span class="nav-ic">✦</span>AI Features</button>
+      <button id="dash-close">← Back to widget</button>
+    </div>
+
+    <div id="dash-content">
+      <div id="global-nowplaying"></div>
+
+      <div class="dash-panel active" data-panel="home">
+        <p class="eyebrow">Overview</p>
+        <h1 class="dash-h1">Hey, welcome back.</h1>
+        <p class="dash-sub">Your overlay is alive and looping in the corner of your stream.</p>
+        <div class="stat-grid" id="home-stats"></div>
+        <p class="eyebrow" style="margin-top:26px">Quick actions</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-primary" data-goto="library">Open sticker library</button>
+          <button class="btn-primary" data-goto="settings" style="background:var(--plum)">Adjust timing</button>
+        </div>
+      </div>
+
+      <div class="dash-panel" data-panel="library">
+        <p class="eyebrow">Auto-detected from /assets/stickers</p>
+        <h1 class="dash-h1">Sticker Library</h1>
+        <p class="dash-sub">Drop files locally, paste a URL, or search Giphy — everything appears here instantly.</p>
+
+        <!-- Add from URL -->
+        <div class="ai-card" style="margin-bottom:16px">
+          <h3 style="margin:0 0 8px">Add from URL</h3>
+          <p style="margin:0 0 10px;font-size:13px;opacity:.85">Paste any direct image / GIF / video link. It will be downloaded into your stickers folder.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="text" id="add-url-input" class="text-input" placeholder="https://example.com/meme.gif" style="flex:1;min-width:200px">
+            <button class="btn-primary btn-small" id="add-url-btn">Download &amp; Add</button>
+          </div>
+          <div id="add-url-status" style="font-size:12px;opacity:.75;margin-top:8px"></div>
+        </div>
+
+        <!-- Giphy Search -->
+        <div class="ai-card" style="margin-bottom:18px">
+          <h3 style="margin:0 0 8px">Search Giphy</h3>
+          <p style="margin:0 0 10px;font-size:13px;opacity:.85">Search GIFs and add them with one click.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <input type="text" id="giphy-query" class="text-input" placeholder="funny cat, reaction, dance..." style="flex:1;min-width:200px">
+            <button class="btn-secondary btn-small" id="giphy-search-btn">Search</button>
+          </div>
+          <div id="giphy-results" class="sticker-grid" style="max-height:280px;overflow-y:auto"></div>
+          <div id="giphy-status" style="font-size:12px;opacity:.75;margin-top:8px"></div>
+        </div>
+
+        <div class="sticker-grid" id="library-grid"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="videos">
+        <p class="eyebrow">MP4 / WebM clips</p>
+        <h1 class="dash-h1">Videos</h1>
+        <p class="dash-sub">
+          Video playback support (<code>.mp4</code>, <code>.webm</code>, <code>.mov</code>, <code>.mkv</code>, <code>.avi</code>)
+          is wired up on the widget side already. It needs one small change in <code>main.js</code>
+          (the folder scanner's allowed file list) before dropped video files will actually appear —
+          that's next on our list.
+        </p>
+        <div class="empty-shelf">No videos yet.</div>
+      </div>
+
+      <div class="dash-panel" data-panel="categories">
+        <p class="eyebrow">Emotion mapping</p>
+        <h1 class="dash-h1">Categories</h1>
+        <p class="dash-sub">Every sticker is auto-sorted by its filename, then handed a matching animation.</p>
+        <div class="category-list" id="category-list"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="favorites">
+        <p class="eyebrow">Pinned</p>
+        <h1 class="dash-h1">Favorites</h1>
+        <p class="dash-sub">Star stickers from the library to collect them here.</p>
+        <button class="btn-primary" id="favorites-play-btn" style="margin-bottom:18px">▶ Loop favorites only</button>
+        <div class="sticker-grid" id="favorites-grid"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="wishlist">
+        <p class="eyebrow">Ideas for later</p>
+        <h1 class="dash-h1">Wishlist</h1>
+        <p class="dash-sub">Jot down stickers or packs you want to make or find.</p>
+        <div class="input-row">
+          <input id="wishlist-input" class="text-input" placeholder="e.g. victory confetti sticker" />
+          <button class="btn-primary" id="wishlist-add">Add</button>
+        </div>
+        <div class="category-list" id="wishlist-list"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="playlists">
+        <p class="eyebrow">Custom loops</p>
+        <h1 class="dash-h1">Playlists</h1>
+        <p class="dash-sub">Group stickers into a themed loop. Pin your favorite playlist to keep it at the top, drag thumbnails to set play order, and queue playlists to auto-rotate.</p>
+        <div class="input-row">
+          <input id="playlist-input" class="text-input" placeholder="Playlist name, e.g. Hype Moments" />
+          <button class="btn-primary" id="playlist-add">Create</button>
+        </div>
+        <div id="queue-section"></div>
+        <div class="category-list" id="playlist-list"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="settings">
+        <p class="eyebrow">Behavior</p>
+        <h1 class="dash-h1">Settings</h1>
+        <div class="setting-row">
+          <div><div class="setting-label">Loop speed</div><div class="setting-desc">Time between sticker transitions — applies instantly</div></div>
+          <input type="range" class="settings-range" id="setting-interval" min="1500" max="10000" step="250" />
+        </div>
+        <div class="setting-row setting-row-block">
+          <div style="width:100%">
+            <div class="setting-label">Switch animation</div>
+            <div class="setting-desc" style="margin-bottom:12px">Choose which transitions the widget may use when swapping stickers. Active ones are picked at random each cycle.</div>
+            <div class="transition-grid" id="setting-transitions"></div>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Start corner</div><div class="setting-desc">Where the widget opens on launch</div></div>
+          <select class="settings-select" id="setting-corner">
+            <option value="top-left">Top left</option>
+            <option value="top-right">Top right</option>
+            <option value="bottom-left">Bottom left</option>
+            <option value="bottom-right">Bottom right</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Lock position</div><div class="setting-desc">Stop the widget from being dragged</div></div>
+          <div class="toggle" id="setting-lock"><div class="knob"></div></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Always on top</div><div class="setting-desc">Keep the widget above your game window</div></div>
+          <div class="toggle" id="setting-ontop"><div class="knob"></div></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Read captions aloud (TTS)</div><div class="setting-desc">Off by default. When on, hovering a captioned sticker speaks its text in a female voice.</div></div>
+          <div class="toggle" id="setting-captions"><div class="knob"></div></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Preview voice</div><div class="setting-desc">Hear a sample line right now</div></div>
+          <button class="btn-secondary btn-small" id="setting-captions-test">▶ Play sample</button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Voice commands</div><div class="setting-desc">Say "set funny", "thank you", or "roast mode" to switch the loop hands-free. Runs locally, no account or API key needed.</div></div>
+          <div class="toggle" id="setting-voice"><div class="knob"></div></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Groq API key <span style="opacity:.6">(optional)</span></div><div class="setting-desc">Stored only on this device (browser local storage) — never written into any file or sent anywhere by this app. Reserved for future AI features.</div></div>
+          <input type="password" class="text-input" id="setting-groq-key" placeholder="Paste your key here" style="max-width:220px" autocomplete="off" />
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Giphy API key <span style="opacity:.6">(optional)</span></div><div class="setting-desc">For GIF search in Sticker Library. Get a free key at developers.giphy.com. Stored only on this device. Leave empty to use limited demo key.</div></div>
+          <input type="password" class="text-input" id="setting-giphy-key" placeholder="Paste your Giphy key here" style="max-width:220px" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-panel" data-panel="animations">
+        <p class="eyebrow">Preview</p>
+        <h1 class="dash-h1">Animations</h1>
+        <p class="dash-sub">Every category gets its own idle motion. Hover a tile to replay it.</p>
+        <div class="sticker-grid" id="animations-grid"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="sounds">
+        <p class="eyebrow">Cartoon SFX</p>
+        <h1 class="dash-h1">Sound Effects</h1>
+        <p class="dash-sub">Drop mp3 files named boing, pop, bonk, ding, whoosh, giggle, squeak, or bubble into /assets/sounds.</p>
+        <div class="setting-row">
+          <div><div class="setting-label">Sound enabled</div><div class="setting-desc">Mute everything with one switch</div></div>
+          <div class="toggle" id="setting-sound"><div class="knob"></div></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Volume</div></div>
+          <input type="range" class="settings-range" id="setting-volume" min="0" max="1" step="0.05" />
+        </div>
+        <div class="category-list" id="sounds-list"></div>
+      </div>
+
+      <div class="dash-panel" data-panel="ai">
+        <p class="eyebrow">Live AI Tools</p>
+        <h1 class="dash-h1">AI Features</h1>
+        <p class="dash-sub">All features below are active. Voice runs locally. Emotion uses microphone energy. Chat Reactions can be tested here or wired to real chat later.</p>
+
+        <!-- Voice Recognition -->
+        <div class="ai-card">
+          <h3>Voice Recognition <span class="badge-live">Live</span></h3>
+          <p>Say these phrases to switch modes instantly (no internet needed):</p>
+          <ul style="margin:8px 0 12px 18px;opacity:.9;font-size:13px">
+            <li><b>"set funny"</b> or <b>"funny mode"</b></li>
+            <li><b>"thank you"</b> or <b>"set cute"</b></li>
+            <li><b>"roast"</b> or <b>"savage"</b></li>
+          </ul>
+          <div class="setting-row" style="margin-top:8px">
+            <div><div class="setting-label">Enable Voice Commands</div></div>
+            <div class="toggle" id="ai-voice-toggle"><div class="knob"></div></div>
+          </div>
+          <div id="ai-voice-status" style="font-size:12px;opacity:.7;margin-top:6px">Status: Off</div>
+        </div>
+
+        <!-- Emotion Detection -->
+        <div class="ai-card">
+          <h3>Emotion Detection <span class="badge-live">Live</span></h3>
+          <p>Listens to microphone volume/energy. Loud or excited speech triggers Shock / Laugh reactions automatically.</p>
+          <div class="setting-row" style="margin-top:8px">
+            <div><div class="setting-label">Enable Emotion Detection</div></div>
+            <div class="toggle" id="ai-emotion-toggle"><div class="knob"></div></div>
+          </div>
+          <div style="margin-top:10px">
+            <div style="font-size:12px;opacity:.7;margin-bottom:4px">Mic energy</div>
+            <div style="height:8px;background:#222;border-radius:4px;overflow:hidden">
+              <div id="ai-emotion-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#4ade80,#facc15,#f87171);transition:width .1s"></div>
+            </div>
+            <div id="ai-emotion-status" style="font-size:12px;opacity:.7;margin-top:6px">Status: Off</div>
+          </div>
+        </div>
+
+        <!-- Context Awareness -->
+        <div class="ai-card">
+          <h3>Context Awareness <span class="badge-live">Live</span></h3>
+          <p>Simple keyword + timing based context. You can also force a context manually for testing.</p>
+          <div class="setting-row" style="margin-top:8px">
+            <div><div class="setting-label">Enable Context Awareness</div></div>
+            <div class="toggle" id="ai-context-toggle"><div class="knob"></div></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn-secondary btn-small" data-context="victory">Victory</button>
+            <button class="btn-secondary btn-small" data-context="fail">Fail</button>
+            <button class="btn-secondary btn-small" data-context="funny">Funny</button>
+            <button class="btn-secondary btn-small" data-context="hype">Hype</button>
+            <button class="btn-secondary btn-small" data-context="chill">Chill</button>
+          </div>
+          <div id="ai-context-status" style="font-size:12px;opacity:.7;margin-top:8px">Current context: none</div>
+        </div>
+
+        <!-- Chat Reactions -->
+        <div class="ai-card">
+          <h3>Chat Reactions <span class="badge-live">Live</span></h3>
+          <p>Type a chat message below to simulate a viewer message. Matching keywords will trigger stickers. Later you can connect real Twitch/YouTube chat to the same event bus.</p>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <input type="text" id="ai-chat-input" class="text-input" placeholder="Type a chat message... e.g. LOL, Pog, F in chat" style="flex:1">
+            <button class="btn-secondary btn-small" id="ai-chat-send">Send</button>
+          </div>
+          <div id="ai-chat-log" style="margin-top:10px;font-size:12px;max-height:120px;overflow-y:auto;opacity:.85"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="renderer.js"></script>
+</body>
+</html>

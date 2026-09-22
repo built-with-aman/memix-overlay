@@ -1,0 +1,24 @@
+{
+  "stickerIntervalMs": 7000,
+  "startCorner": "bottom-right",
+  "widgetSize": 290,
+  "alwaysOnTop": true,
+  "locked": false,
+  "sound": {
+    "enabled": true,
+    "volume": 0.5
+  },
+  "captions": {
+    "enabled": true,
+    "voicePreference": "female"
+  },
+  "transitions": [
+    "paperFold",
+    "liquidMorph",
+    "squashPop",
+    "floatingSmoke",
+    "elasticSlide",
+    "comicBurst"
+  ],
+  "paused": false
+}
