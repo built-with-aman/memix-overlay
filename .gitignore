@@ -1,3 +1,7 @@
-node_modules/ 
-.env 
-.env.local 
+node_modules/
+.env
+.env.local
+
+# Ignore local sticker files
+assets/stickers/*
+!assets/stickers/.gitkeep
